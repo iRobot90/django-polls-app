@@ -65,6 +65,14 @@
         "documentation": {}
     },
     {
+        "label": "reverse",
+        "importPath": "django.urls",
+        "description": "django.urls",
+        "isExtraImport": true,
+        "detail": "django.urls",
+        "documentation": {}
+    },
+    {
         "label": "get_wsgi_application",
         "importPath": "django.core.wsgi",
         "description": "django.core.wsgi",
@@ -139,11 +147,35 @@
         "documentation": {}
     },
     {
-        "label": "HttpResponse",
+        "label": "HttpResponseRedirect",
         "importPath": "django.http",
         "description": "django.http",
         "isExtraImport": true,
         "detail": "django.http",
+        "documentation": {}
+    },
+    {
+        "label": "get_object_or_404",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "render",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "generic",
+        "importPath": "django.views",
+        "description": "django.views",
+        "isExtraImport": true,
+        "detail": "django.views",
         "documentation": {}
     },
     {
@@ -372,20 +404,56 @@
         "documentation": {}
     },
     {
-        "label": "urlpatterns",
+        "label": "app_name",
         "kind": 5,
         "importPath": "polls.urls",
         "description": "polls.urls",
-        "peekOfCode": "urlpatterns = [\n    path('', views.index, name='index'),\n]",
+        "peekOfCode": "app_name = \"polls\"\nurlpatterns = [\n    path(\"\", views.IndexView.as_view(), name=\"index\"),\n    path(\"<int:pk>/\", views.DetailView.as_view(), name=\"detail\"),\n    path(\"<int:pk>/results/\", views.ResultsView.as_view(), name=\"results\"),\n    path(\"<int:question_id>/vote/\", views.vote, name=\"vote\"),\n]",
         "detail": "polls.urls",
         "documentation": {}
     },
     {
-        "label": "index",
+        "label": "urlpatterns",
+        "kind": 5,
+        "importPath": "polls.urls",
+        "description": "polls.urls",
+        "peekOfCode": "urlpatterns = [\n    path(\"\", views.IndexView.as_view(), name=\"index\"),\n    path(\"<int:pk>/\", views.DetailView.as_view(), name=\"detail\"),\n    path(\"<int:pk>/results/\", views.ResultsView.as_view(), name=\"results\"),\n    path(\"<int:question_id>/vote/\", views.vote, name=\"vote\"),\n]",
+        "detail": "polls.urls",
+        "documentation": {}
+    },
+    {
+        "label": "IndexView",
+        "kind": 6,
+        "importPath": "polls.views",
+        "description": "polls.views",
+        "peekOfCode": "class IndexView(generic.ListView):\n    template_name = \"polls/index.html\"\n    context_object_name = \"latest_question_list\"\n    def get_queryset(self):\n        \"\"\"Return the last five published questions.\"\"\"\n        return Question.objects.order_by(\"-pub_date\")[:5]\nclass DetailView(generic.DetailView):\n    model = Question\n    template_name = \"polls/detail.html\"\nclass ResultsView(generic.DetailView):",
+        "detail": "polls.views",
+        "documentation": {}
+    },
+    {
+        "label": "DetailView",
+        "kind": 6,
+        "importPath": "polls.views",
+        "description": "polls.views",
+        "peekOfCode": "class DetailView(generic.DetailView):\n    model = Question\n    template_name = \"polls/detail.html\"\nclass ResultsView(generic.DetailView):\n    model = Question\n    template_name = \"polls/results.html\"\ndef vote(request, question_id):\n    question = get_object_or_404(Question, pk=question_id)\n    try:\n        selected_choice = question.choice_set.get(pk=request.POST[\"choice\"])",
+        "detail": "polls.views",
+        "documentation": {}
+    },
+    {
+        "label": "ResultsView",
+        "kind": 6,
+        "importPath": "polls.views",
+        "description": "polls.views",
+        "peekOfCode": "class ResultsView(generic.DetailView):\n    model = Question\n    template_name = \"polls/results.html\"\ndef vote(request, question_id):\n    question = get_object_or_404(Question, pk=question_id)\n    try:\n        selected_choice = question.choice_set.get(pk=request.POST[\"choice\"])\n    except (KeyError, Choice.DoesNotExist):\n        # Redisplay the question voting form.\n        return render(",
+        "detail": "polls.views",
+        "documentation": {}
+    },
+    {
+        "label": "vote",
         "kind": 2,
         "importPath": "polls.views",
         "description": "polls.views",
-        "peekOfCode": "def index(request):\n    return HttpResponse(\"Hello, world. You're at the polls index.\")",
+        "peekOfCode": "def vote(request, question_id):\n    question = get_object_or_404(Question, pk=question_id)\n    try:\n        selected_choice = question.choice_set.get(pk=request.POST[\"choice\"])\n    except (KeyError, Choice.DoesNotExist):\n        # Redisplay the question voting form.\n        return render(\n            request,\n            \"polls/detail.html\",\n            {",
         "detail": "polls.views",
         "documentation": {}
     },
