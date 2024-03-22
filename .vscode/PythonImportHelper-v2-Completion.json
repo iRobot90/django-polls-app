@@ -57,6 +57,14 @@
         "documentation": {}
     },
     {
+        "label": "reverse",
+        "importPath": "django.urls",
+        "description": "django.urls",
+        "isExtraImport": true,
+        "detail": "django.urls",
+        "documentation": {}
+    },
+    {
         "label": "path",
         "importPath": "django.urls",
         "description": "django.urls",
@@ -128,6 +136,22 @@
         "importPath": "datetime",
         "description": "datetime",
         "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
         "documentation": {}
     },
     {
@@ -404,6 +428,33 @@
         "documentation": {}
     },
     {
+        "label": "QuestionModelTests",
+        "kind": 6,
+        "importPath": "polls.tests",
+        "description": "polls.tests",
+        "peekOfCode": "class QuestionModelTests(TestCase):\n    def test_was_published_recently_with_future_question(self):\n        \"\"\"\n        was_published_recently() returns False for questions whose pub_date\n        is in the future.\n        \"\"\"\n        time = timezone.now() + datetime.timedelta(days=30)\n        future_question = Question(pub_date=time)\n        self.assertIs(future_question.was_published_recently(), False)\n    def test_was_published_recently_with_old_question(self):",
+        "detail": "polls.tests",
+        "documentation": {}
+    },
+    {
+        "label": "QuestionIndexViewTests",
+        "kind": 6,
+        "importPath": "polls.tests",
+        "description": "polls.tests",
+        "peekOfCode": "class QuestionIndexViewTests(TestCase):\n    def test_no_questions(self):\n        \"\"\"\n        If no questions exist, an appropriate message is displayed.\n        \"\"\"\n        response = self.client.get(reverse(\"polls:index\"))\n        self.assertEqual(response.status_code, 200)\n        self.assertContains(response, \"No polls are available.\")\n        self.assertQuerySetEqual(response.context[\"latest_question_list\"], [])\n    def test_past_question(self):",
+        "detail": "polls.tests",
+        "documentation": {}
+    },
+    {
+        "label": "test_was_published_recently_with_recent_question",
+        "kind": 2,
+        "importPath": "polls.tests",
+        "description": "polls.tests",
+        "peekOfCode": "def test_was_published_recently_with_recent_question(self):\n    \"\"\"\n    was_published_recently() returns True for questions whose pub_date\n    is within the last day.\n    \"\"\"\n    time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)\n    recent_question = Question(pub_date=time)\n    self.assertIs(recent_question.was_published_recently(), True)\n    def create_question(question_text, days):\n     \"\"\"",
+        "detail": "polls.tests",
+        "documentation": {}
+    },
+    {
         "label": "app_name",
         "kind": 5,
         "importPath": "polls.urls",
@@ -426,7 +477,7 @@
         "kind": 6,
         "importPath": "polls.views",
         "description": "polls.views",
-        "peekOfCode": "class IndexView(generic.ListView):\n    template_name = \"polls/index.html\"\n    context_object_name = \"latest_question_list\"\n    def get_queryset(self):\n        \"\"\"Return the last five published questions.\"\"\"\n        return Question.objects.order_by(\"-pub_date\")[:5]\nclass DetailView(generic.DetailView):\n    model = Question\n    template_name = \"polls/detail.html\"\nclass ResultsView(generic.DetailView):",
+        "peekOfCode": "class IndexView(generic.ListView):\n    template_name = \"polls/index.html\"\n    context_object_name = \"latest_question_list\"\n    def get_queryset(self):\n     \"\"\"\n     Return the last five published questions (not including those set to be\n     published in the future).\n     \"\"\"\n     return Question.objects.filter(pub_date__lte=timezone.now()).order_by(\"-pub_date\")[\n        :5",
         "detail": "polls.views",
         "documentation": {}
     },
